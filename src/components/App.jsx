@@ -19,7 +19,7 @@ const App = () => {
   useEffect(() => {
     // IIFE
     (async () => {
-      const res = await fetch('http://localhost:4001/entries')
+      const res = await fetch(`${import.meta.env.VITE_API_HOST}/entries`)
       const data = await res.json()
       setEntries(data)
     })()
@@ -35,7 +35,7 @@ const App = () => {
   async function addEntry(category, content) {
     const id = entries.length
     // Add a new entry
-    const returnedEntry = await fetch('http://localhost:4001/entries', {
+    const returnedEntry = await fetch(`${import.meta.env.VITE_API_HOST}/entries`, {
       method: 'POST',
       headers: {
         "Content-Type": "application/json"
