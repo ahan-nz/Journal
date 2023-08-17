@@ -1,43 +1,15 @@
-import React, { useEffect, useReducer} from "react"
+import React, { useEffect, useReducer } from "react"
 import Home from "./Home"
 import CategorySelection from "./CategorySelection"
 import NewEntry from "./NewEntry"
 import { BrowserRouter, Routes, Route, useParams, useNavigate } from "react-router-dom"
 import NavBar from "./NavBar"
 import ShowEntry from "./ShowEntry"
-
-// const seedEntries = [
-//   { category: "Food", content: "Pizza is yummy!" },
-//   { category: "Coding", content: "Coding is fun!" },
-//   { category: "Gaming", content: "Skyrim is for the Nords!" },
-// ]
-
-function reducer(currentState, action) {
-  switch (action.type) {
-    case 'setEntries':
-      return {
-        ...currentState,
-        entries: action.entries
-      }
-    case 'addEntry':
-      return {
-        ...currentState,
-        entries: [...currentState.entries, action.entries]
-      }
-    default:
-      return currentState
-  }
-}
-
-const initialState ={
-  entries: [],
-  categories: []
-}
+import { reducer, initialState } from "../reducer.js"
+import JournalContext from "../context"
 
 const App = () => {
   const nav = useNavigate()
-  // const [entries, setEntries] = useState([])
-
   const [store, dispatch] = useReducer(reducer, initialState)
   const { entries } = store
 
@@ -77,10 +49,10 @@ const App = () => {
   }
 
   return (
-    <>
+    <JournalContext.Provider value={{ entries, addEntry }}>
       <NavBar />
       <Routes>
-        <Route path="/" element={<Home entries={entries} />} />
+        <Route path="/" element={<Home />} />
         <Route path="/category" element={<CategorySelection />} />
         <Route path="/entry">
           <Route path=":id" element={<ShowEntryWrapper />} />
@@ -88,7 +60,7 @@ const App = () => {
         </Route>
         <Route path="*" element={<h3>Page not found</h3>} />
       </Routes>
-    </>
+    </JournalContext.Provider>
   )
 }
 
